@@ -1,10 +1,10 @@
-# KTVHTTPCache
+# 唱吧 iOS 音视频缓存处理框架
 
 
 
 ## 项目介绍
 
-KTVHTTPCache 是一个处理 HTTP 网络缓存的框架。设计之初是为了解决音视频在线播放的缓存问题。但其应用场景不仅限于音视频在线播放，也可以用于图片加载、文件下载、普通网络请求等场景。
+唱吧 iOS 团队为了解决音视频在线播放的缓存问题，开发了 KTVHTTPCache 这个框架。设计之初是为了解决音视频在线播放的缓存问题，但其本质是对 HTTP 请求进行缓存，对传输内容并没有限制，因此应用场景不限于音视频在线播放，也可以用于文件下载、图片加载、普通网络请求等场景。
 
 
 ### 技术背景
@@ -33,7 +33,7 @@ KTVHTTPCache 由 HTTP Server 和 Data Storage 两大模块组成。前者负责�
 ![KTVHTTPCache Flow Chart](http://oxl6mxy2t.bkt.clouddn.com/changba/KTVHTTPCache-flow-chart.jpeg)
 
 ##### 下面简述一下工作流程：
-1. Client 发出的请求被 HTTP Srever 接收到，HTTP Server 通过分析 HTTP Request 创建用于访问 Data Storage 的 Data Request 对象。
+1. Client 发出的请求被 HTTP Server 接收到，HTTP Server 通过分析 HTTP Request 创建用于访问 Data Storage 的 Data Request 对象。
 2. HTTP Server 使用 Data Request 创建 Data Reader，并以此作为从 Data Storage 获取数据的通道。
 3. Data Reader 分析 Data Request 中的 Range 创建对应的网络数据源 Data Network Source 和文件数据源 Data File Source，并通过 Data Sourcer 进行管理。
 4. Data Sourcer 开始加载数据。
@@ -51,6 +51,30 @@ KTVHTTPCache 由 HTTP Server 和 Data Storage 两大模块组成。前者负责�
 5. Data Network Source: 800-999
 
 它们由 Data Sourcer 进行管理，对外仅暴露一个 Read Data 的接口，根据当前的 Read Offset 自行选择向外界提供数据的 Source。
+
+
+## Installation
+
+#### Installation with CocoaPods
+
+To integrate KTVHTTPCache into your Xcode project using CocoaPods, specify it in your Podfile:
+
+```ruby
+pod 'KTVHTTPCache', '~> 1.0.0'
+```
+
+Run `pod install`
+
+#### Installation with Carthage
+
+To integrate KTVHTTPCache into your Xcode project using Carthage, specify it in your Cartfile:
+
+```ogdl
+github "ChangbaDevs/KTVHTTPCache" ~> 1.0.0
+```
+
+Run `carthage update` to build the framework and drag the built `KTVHTTPCache.framework` and `CocoaHTTPServer.framework` into your Xcode project.
+
 
 
 ### 使用示例
@@ -92,7 +116,7 @@ AVPlayer * player = [AVPlayer playerWithURL:[NSURL URLWithString:URLString]];
 
 #### 1. Content-Type 和 Path Extension
 
-AVPlay 在播放时会优先根据 Response Header 中的 Content-Type 判断当前资源是否可以播放。当 Content-Type 无法给出有效信息时再去判断 URL 中的 Path Extension。
+AVPlayer 在播放时会优先根据 Response Header 中的 Content-Type 判断当前资源是否可以播放。当 Content-Type 无法给出有效信息时再去判断 URL 中的 Path Extension。
 
 对应关系如下：
 
